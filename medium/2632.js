@@ -28,8 +28,13 @@ function sum(a, b) {
   console.log("sum: ", a, b);
   return a + b;
 }
+function life() {
+  return 42;
+}
 
 const curriedSum = curry(sum);
 // console.log(curriedSum(1)(2)(3));
-console.log(curriedSum(1)(2, 3));
+// console.log(curriedSum(1)(2, 3));
 // console.log(curriedSum(1, 2, 3));
+const curriedLife = curry(life);
+console.log(curriedLife());
