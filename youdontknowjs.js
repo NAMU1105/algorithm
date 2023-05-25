@@ -54,3 +54,13 @@ const foo = (arg) => {
 // foo(42).then((val) => console.log(val));
 // do this
 Promise.resolve(foo(42)).then((val) => console.log(val));
+
+////////
+// 실행 순서: catch -> then
+new Promise((resolve, reject) => {
+  throw new Error("에러 발생!");
+})
+  .catch(function (error) {
+    console.log("에러가 잘 처리되었습니다. 정상적으로 실행이 이어집니다.");
+  })
+  .then(() => alert("다음 핸들러가 실행됩니다."));
