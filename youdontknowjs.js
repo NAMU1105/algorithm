@@ -56,11 +56,18 @@ const foo = (arg) => {
 Promise.resolve(foo(42)).then((val) => console.log(val));
 
 ////////
+// 카일이 말한 것, catch에 있는 에러는 어떻게 잡을 건데?
 // 실행 순서: catch -> then
 new Promise((resolve, reject) => {
   throw new Error("에러 발생!");
 })
   .catch(function (error) {
     console.log("에러가 잘 처리되었습니다. 정상적으로 실행이 이어집니다.");
+    // 여기에 있는 코드가 에러가 있을 경우 에러를 잡을 수 없다
+    // boo();
   })
-  .then(() => alert("다음 핸들러가 실행됩니다."));
+  .then(() => {
+    // console.log("다음 핸들러가 실행됩니다.");
+    // 여기에 있는 코드가 에러가 있을 경우 에러를 잡을 수 없다
+    // coo();
+  });
