@@ -1,55 +1,29 @@
 // Leetcode JS challenge day17
 // https://leetcode.com/problems/json-deep-equal/?utm_campaign=PostD17&utm_medium=Post&utm_source=Post&gio_link_id=4PKqJ0z9
-/**
- * @param {any} o1
- * @param {any} o2
- * @return {boolean}
- */
-var areDeeplyEqual = function (o1, o2) {
-  let answer = true;
-  console.log({ o1, o2 });
+// https://leetcode.com/problems/json-deep-equal/solutions/3411176/all-cases-detailed-explanation/
 
-  if (typeof o1 !== typeof o2) return false;
-  if (typeof o1 !== "object") return o1 === o2;
+var areDeeplyEqual = function (o1, o2) {
+  // All equal values and same objects are eliminated
+  if (o1 === o2) return true;
+
+  // If any of o1 or o2 is not an object, they are different values
+  if (typeof o1 != "object" || typeof o2 != "object") return false;
+
+  // Both of them should be objects or arrays
   if (Array.isArray(o1) !== Array.isArray(o2)) return false;
 
-  const checkArray = (value1, value2) => {
-    let answer = true;
-    if (value1.length !== value2.length) answer = false;
-    value1.forEach((element) => {
-      // TODO: add check for object
-      if (!value2.includes(element)) answer = false;
-    });
-    return answer;
-  };
+  // Both should have same keys, in case of indexes this will return indexes
+  if (Object.keys(o1).length != Object.keys(o2).length) return false;
 
-  if (Array.isArray(o1)) return checkArray(o1, o2);
+  // Check if all values against keys of o1 and o2 are deeply equal.
+  // If number of keys are same, then at a different key in objects would mean at least
+  // 1 value against the key of o2 will be undefined
+  for (const key in o1) {
+    if (!areDeeplyEqual(o1[key], o2[key])) return false;
+  }
 
-  if ((o1 === null && o2 === null) || (o1 === undefined && o2 === undefined))
-    return true;
-
-  Object.keys(o1).forEach((key) => {
-    console.log(o1[key], o2[key], key);
-    if (typeof o1[key] !== typeof o2[key]) answer = false;
-
-    // if (
-    //   (o1[key] === null && o2[key] === null) ||
-    //   (o1[key] === undefined && o2[key] === undefined)
-    // ) {
-    //   return;
-    // } else
-    if (typeof o1[key] === "object" && !Array.isArray(o1[key])) {
-      if (!areDeeplyEqual(o1[key], o2[key])) answer = false;
-    } else if (Array.isArray(o1[key])) {
-      //   console.log("ehre");
-      answer = checkArray(o1[key], o2[key]);
-      //   if (o1[key].length !== o2[key].length) answer = false;
-      //   o1[key].forEach((element) => {
-      //     if (!o2[key].includes(element)) answer = false;
-      //   });
-    } else if (o1[key] !== o2[key]) answer = false;
-  });
-  return answer;
+  // All checks passed
+  return true;
 };
 
 // const o1 = { x: 1, y: 2 },
