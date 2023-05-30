@@ -7,7 +7,7 @@
  */
 var areDeeplyEqual = function (o1, o2) {
   let answer = true;
-  //   console.log({ o1, o2 });
+  console.log({ o1, o2 });
 
   if (typeof o1 !== typeof o2) return false;
   if (typeof o1 !== "object") return o1 === o2;
@@ -17,6 +17,7 @@ var areDeeplyEqual = function (o1, o2) {
     let answer = true;
     if (value1.length !== value2.length) answer = false;
     value1.forEach((element) => {
+      // TODO: add check for object
       if (!value2.includes(element)) answer = false;
     });
     return answer;
@@ -28,7 +29,7 @@ var areDeeplyEqual = function (o1, o2) {
     return true;
 
   Object.keys(o1).forEach((key) => {
-    // console.log(o1[key], o2[key], key);
+    console.log(o1[key], o2[key], key);
     if (typeof o1[key] !== typeof o2[key]) answer = false;
 
     // if (
@@ -55,8 +56,8 @@ var areDeeplyEqual = function (o1, o2) {
 // o2 = { x: 1, y: 2 };
 // const o1 = { y: 2, x: 1 },
 //   o2 = { x: 1, y: 2 };
-const o1 = { x: null, L: [1, 2, 3] },
-  o2 = { x: null, L: ["1", "2", "3"] };
+// const o1 = { x: null, L: [1, 2, 3] },
+//   o2 = { x: null, L: ["1", "2", "3"] };
 // const o1 = true,
 //   o2 = false;
 // const o1 = { 0: 1 },
@@ -67,4 +68,6 @@ const o1 = { x: null, L: [1, 2, 3] },
 //   o2 = { x: null, L: [1, 2, 3] };
 // const o1 = null,
 //   o2 = null;
+const o1 = [1, 2, 3, { x: 4 }],
+  o2 = [1, 2, 3, { x: 4 }];
 console.log(areDeeplyEqual(o1, o2));
