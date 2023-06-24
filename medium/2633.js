@@ -1,75 +1,30 @@
 // Leetcode JS challenge day 18
 // https://leetcode.com/problems/convert-object-to-json-string/?utm_campaign=PostD18&utm_medium=Post&utm_source=Post&gio_link_id=GPnkNmWo
 
-/**
- * @param {any} object
- * @return {string}
- */
+// https://leetcode.com/problems/convert-object-to-json-string/solutions/3406872/without-using-the-built-in-json-stringify-method-recursive-solution/?utm_campaign=PostD18&utm_medium=Post&utm_source=Post&gio_link_id=GPnkNmWo
+// 차분히 스텝 바이 스텝으로 생각하고 코드를 짜기
+
 var jsonStringify = function (object) {
-  let anwser = "";
-  const helper = (obj, idx, last) => {
-    // console.log({ obj });
-    if (typeof obj !== "object" || obj === null) {
-      anwser += `${typeof obj === "string" ? `"${obj}"` : obj}${
-        idx === last - 1 ? "" : ","
-      }`;
-      return;
-    }
+  if (object === null) return "null";
+  // return the string value surrounded by double quotes.
+  if (typeof object === "string") return `"${object}"`;
+  // return its string representation.
+  if (typeof object === "number" || typeof object === "boolean") {
+    return String(object);
+  }
 
-    if (Array.isArray(obj)) {
-      obj.forEach((item, idx) => {
-        helper(item, idx, obj.length);
-      });
-      return;
-    }
-    if (Object.keys(obj).length === 0) {
-      anwser += `{}${idx === last - 1 ? "" : ","}`;
-      return;
-    }
-    Object.keys(obj).forEach((key, idx) => {
-      //   console.log(obj, obj[key]);
-      if (typeof obj[key] !== "object" || obj[key] === null) {
-        // console.log("here2: ", obj[key]);
-        const value = typeof obj[key] === "string" ? `"${obj[key]}"` : obj[key];
-        anwser += `${idx === 0 ? "{" : ""}"${key}":${value}${
-          idx === Object.keys(obj).length - 1 ? "}" : ","
-        }`;
-      } else {
-        const isArray = Array.isArray(obj[key]);
-        // console.log(obj[key], isArray);
-        const braketStart = isArray ? "[" : "{";
-        const braketEnd = isArray ? "]" : "}";
-
-        // const isNotEmpty = Object.keys(obj[key]).length > 0;
-        // console.log("here: ", obj[key], isNotEmpty);
-        if (isArray) {
-          anwser += `${idx === 0 ? "{" : ""}"${key}":${braketStart}`;
-        } else {
-          anwser += `${idx === 0 ? braketStart : ""}"${key}":`;
-
-          //   anwser += isNotEmpty
-          //     ? `${idx === 0 ? braketStart : ""}"${key}":`
-          //     : `${braketStart}`;
-        }
-        // console.log(obj[key]);
-        // if (isNotEmpty) helper(obj[key]);
-        helper(obj[key], idx, Object.keys(obj).length);
-        // anwser += isNotEmpty
-        //   ? `${idx === Object.keys(obj).length - 1 ? braketEnd : ","}`
-        //   : `${braketEnd},`;
-        // console.log({ key, last, idx });
-
-        anwser += `${idx === Object.keys(obj).length - 1 ? braketEnd : ","}`;
-      }
-    });
-  };
-  helper(object);
-  return anwser;
+  ////////////////////////////////
+  // Recursively convert each item to a JSON string suing map and join them with commas.
+  if (Array.isArray(object)) {
+    const items = object.map((item) => jsonStringify(item)).join(",");
+    return `[${items}]`;
+  }
+  // Recursively convert each value to a JSON string and pair it with the corresponding key.
+  if (typeof object === "object") {
+    const keys = Object.keys(object);
+    const items = keys.map((key) => `"${key}":${jsonStringify(object[key])}`);
+    return `{${items.join(",")}}`;
+  }
 };
-
-// const object = { y: 1, x: 2 };
-// const object = { a: "str", b: -12, c: true, d: null };
-// const object = { key: { a: 1, b: [{}, null, "Hello"] } };
-const object = true;
 
 console.log(jsonStringify(object));
